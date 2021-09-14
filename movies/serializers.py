@@ -51,6 +51,7 @@ class MovieListSerializers(serializers.ModelSerializer):
     category = CategorySerializers()
     profit = serializers.SerializerMethodField(method_name='get_profit')
     reviews = ReviewCreateSerializers(many=True)
+    rating_user = serializers.BooleanField()
 
 
     def get_profit(self, obj):
@@ -58,8 +59,8 @@ class MovieListSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ('title', 'tagline', 'category', 'profit', 'reviews', 'movieshots_set', 'rating_set', 'genres')
-        # depth = 2
+        fields = ('title', 'tagline', 'category', 'profit', 'reviews', 'movieshots_set', 'rating_set', 'genres', 'rating_user')
+
 
 
 class MovieDetailSerializer(serializers.ModelSerializer):
