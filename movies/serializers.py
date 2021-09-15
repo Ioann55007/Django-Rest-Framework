@@ -52,14 +52,14 @@ class MovieListSerializers(serializers.ModelSerializer):
     profit = serializers.SerializerMethodField(method_name='get_profit')
     reviews = ReviewCreateSerializers(many=True)
     rating_user = serializers.BooleanField()
-
+    middle_star = serializers.IntegerField()
 
     def get_profit(self, obj):
         return obj.fess_in_world - obj.budget
 
     class Meta:
         model = Movie
-        fields = ('title', 'tagline', 'category', 'profit', 'reviews', 'movieshots_set', 'rating_set', 'genres', 'rating_user')
+        fields = ('id', 'title', 'tagline', 'category', 'profit', 'reviews', 'movieshots_set', 'genres', 'rating_user', "middle_star")
 
 
 
