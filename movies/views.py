@@ -19,6 +19,7 @@ class MovieListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
     permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
             rating_user=models.Count("ratings",
