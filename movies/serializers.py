@@ -26,7 +26,7 @@ class FilterReviewListSerializer(serializers.ListSerializer):
         return super().to_representation(data)
 
 
-class RecursiveSerializer(serializers.ModelSerializer):
+class RecursiveSerializer(serializers.Serializer):
     """Вывод рекурсивно children"""
 
     def to_representation(self, value):
