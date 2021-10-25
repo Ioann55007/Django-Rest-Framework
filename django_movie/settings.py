@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
 
+from oauthlib.oauth2.rfc6749.grant_types import refresh_token
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -44,12 +46,17 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'djoser',
-    'drf_yasg',
 
+    'oauth2_provider',
+    'social_django',
+    'rest_framework_social_oauth2',
+
+    'drf_yasg',
     'django_filters',
 
     'movies',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -210,22 +217,28 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+SOCIAL_AUTH_VK_OAUTH2_KEY_ = '7918553'
+SOCIAL_AUTH_VK_OAUTH2_SECRET_ = 'tGZ3sAGJeEA46Odcmb6N'
+
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
-
-# smtp
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ivankhabibullin7@gmail.com'
-EMAIL_HOST_PASSWORD = '13831945okk'
-EMAIL_PORT = 587
 
 
 DJOSER = {
@@ -261,4 +274,18 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+# smtp
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ivankhabibullin7@gmail.com'
+EMAIL_HOST_PASSWORD = '13831945okk'
+EMAIL_PORT = 587
+
+OAUTH2_PROVIDER = {
+    # parses OAuth2 data from application/json requests
+    # 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
 }
