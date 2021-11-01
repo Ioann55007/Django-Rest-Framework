@@ -4,20 +4,21 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Movie, Actor, Review
 from .serializers import (
-    MovieListSerializer,
+    MovieListSerializers,
     MovieDetailSerializer,
-    ReviewCreateSerializer,
+    ReviewCreateSerializers,
     CreateRatingSerializer,
     ActorListSerializer,
     ActorDetailSerializer,
 )
-from .service import get_client_ip, MovieFilter
+from .service import get_client_ip, MovieFilter, PaginationMovies
 
 
 class MovieViewSet(viewsets.ReadOnlyModelViewSet):
     """Вывод списка фильмов"""
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MovieFilter
+    pagination_class = PaginationMovies
 
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
@@ -30,14 +31,14 @@ class MovieViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return MovieListSerializer
+            return MovieListSerializers
         elif self.action == "retrieve":
             return MovieDetailSerializer
 
 
 class ReviewCreateViewSet(viewsets.ModelViewSet):
     """Добавление отзыва к фильму"""
-    serializer_class = ReviewCreateSerializer
+    serializer_class = ReviewCreateSerializers
 
 
 class AddStarRatingViewSet(viewsets.ModelViewSet):
